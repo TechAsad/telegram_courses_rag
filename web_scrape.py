@@ -14,11 +14,10 @@ import asyncio
 from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
-from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 
-from langchain_chroma import Chroma
+
 from langchain_community.document_loaders import DirectoryLoader
-import chromadb
+
 
 load_dotenv()
 OPENAI_API_KEY =  os.getenv('OPENAI_API_KEY')
@@ -107,46 +106,9 @@ def get_links_and_text(url: str, max_depth: int = 2, max_retries: int = 3, backo
 
 
 
-async def add_docs(vectordb, docs):
-    await vectordb.aadd_documents(documents=docs)
-
-
-from langchain.schema import Document  # Ensure you have this import
-
-def create_vectordb(url):
-    # Assuming get_links_and_text returns a list of dictionaries with 'content' keys
-    text_dicts = get_links_and_text(url)
-    print(text_dicts)
-
-    # Convert the text into Document objects
-    documents = [Document(page_content=text_dict['content']) for text_dict in text_dicts]
-    
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1500,
-        chunk_overlap=50,
-        length_function=len,
-        is_separator_regex=False
-    )
-    docs = splitter.split_documents(documents)
-    
-    persist_directory = 'chroma_db'
-    
-    vectordb = Chroma(embedding_function= embeddings)#, persist_directory="./chroma_db")
-   
-    #vectordb = Chroma.from_documents(documents=docs, embedding=embeddings, persist_directory=persist_directory)
-    asyncio.run(add_docs(vectordb, docs))
-    
-    
-    return vectordb
 
 
 
 
-
-if __name__ == "__main__":
-    
-    url ="https://www.vendasta.com/business-app-pro/"
-
-    create_vectordb(url)
 
    
