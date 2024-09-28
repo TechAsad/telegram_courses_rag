@@ -26,7 +26,7 @@ import re
 import json
 from langchain.schema import Document  # Ensure you have this import
 
-from web_scrape import create_vectordb
+
 from web_scrape import get_links_and_text
 from web_search import get_links_and_text_new
 
@@ -170,12 +170,13 @@ def get_response(prompt, stand_alone_question, data, memory_org):
         template="""
         You are a helpful assistant who has knowledge abouT  "hormozicourse" [Alex Hormozi - $100M Leads - How to Get Strangers To Want To Buy Your Stuff].
         
-        \n
-        User has asked question about  this course and must answer humbly and respectfully
-        to help the user. Your response should be focused on the course context given to you. Please also answer  relevant to the current conversation between you (AI) and the user.
-        Do not answer from your training knowledge.
-        \n
-        this is the course context :
+            \n
+            User has asked question about this course and must answer humbly and respectfully
+            to help the user. Your response should be focused on the course context given to you. Please also answer  relevant to the current conversation between you (AI) and the user.
+            if asked, you must generate effective offers about the provided product/service.
+            Do not answer from your training knowledge.
+            \n
+            this is the course context :
         
         {new_website}\n\n
         
@@ -204,7 +205,7 @@ def generate_response_chat(message_list, memory):
         stand_alone_question = stand_alone(message_list, memory)
         print("\n\nstand alone question\n")
         print(stand_alone_question)
-        docs = vector_store.similarity_search(stand_alone_question, namespace="hormozicourse")#VectorSearchTools_chroma.dbsearch(stand_alone_question)
+        docs = vector_store.similarity_search(stand_alone_question, namespace="hormozicourse", k=6)#VectorSearchTools_chroma.dbsearch(stand_alone_question)
         updated_content = last_message["content"] + "\n\n"
         
         
