@@ -90,7 +90,6 @@ def stand_alone(prompt, memory):
         
         if user asks more information about a website from chat history, always attach the website url in your response.
         
-        
         chat_historry: {memory}
         
         Question: {question} \n\n 
