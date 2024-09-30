@@ -82,7 +82,7 @@ conversations = {}
 
 def stand_alone(prompt, memory):
     prompt_chat = PromptTemplate(
-        template="""system 
+        template="""
         you are a helpful assistant, provide a standalone question based on conversation history and the new question.
         Do not deviate from the core meaning of the new question.
         Do not write any explanation.
